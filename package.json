@@ -1,0 +1,75 @@
+{
+  "name": "spring-react-electron-app",
+  "version": "1.0.0",
+  "main": "electron/main.js",
+  "scripts": {
+    "postinstall": "cd front && npm install",
+    "dev": "npm run start",
+    "start": "concurrently \"npm run dev:front\" \"npm run dev:electron\"",
+    "dev:front": "cd front && npm run dev",
+    "dev:electron": "wait-on http://localhost:5174 && electron .",
+    "build": "cd front && npm run build",
+    "package": "electron-builder",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "electron": "^29.0.0",
+    "electron-builder": "^24.9.1",
+    "wait-on": "^7.2.0"
+  },
+  "dependencies": {
+    "@radix-ui/react-label": "^2.1.6",
+    "@radix-ui/react-slot": "^1.2.2",
+    "@radix-ui/react-toast": "^1.2.13",
+    "@shadcn/ui": "^0.0.4",
+    "@stomp/stompjs": "^7.1.1",
+    "@tiptap/extension-image": "^2.12.0",
+    "@tiptap/extension-placeholder": "^2.12.0",
+    "@tiptap/react": "^2.12.0",
+    "@tiptap/starter-kit": "^2.12.0",
+    "@toast-ui/editor": "^3.2.2",
+    "@toast-ui/react-editor": "^3.2.3",
+    "auto-launch": "^5.0.5",
+    "axios": "^1.9.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.15.0",
+    "lucide-react": "^0.511.0",
+    "mediasoup-client": "^3.11.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.56.4",
+    "react-router-dom": "^7.6.1",
+    "react-toastify": "^11.0.5",
+    "socket.io-client": "^4.8.1",
+    "sockjs-client": "^1.6.1",
+    "stompjs": "^2.3.3",
+    "tailwind-merge": "^3.3.0",
+    "tailwindcss-animate": "^1.0.7",
+    "ui": "github:shadcn/ui"
+  },
+  "build": {
+    "appId": "com.example.electronapp",
+    "productName": "MyElectronApp",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "electron/**/*",
+      "front/dist/**/*",
+      "package.json"
+    ],
+    "extraResources": [],
+    "win": {
+      "target": "nsis",
+      "icon": "electron/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

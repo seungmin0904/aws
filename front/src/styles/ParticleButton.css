@@ -1,0 +1,44 @@
+.button {
+  padding: 0.5em 1em;
+  font-size: 1em;
+  font-weight: 400;
+  border-radius: 4px;
+  cursor: pointer;
+  appearance: none;
+  border: none;
+  color: #ffffff;
+  font-family: "Helvetica", "Arial", sans-serif;
+}
+
+.button-first {
+  background: linear-gradient(to right, #e55d87, #5fc3e4);
+  box-shadow: 0 2px 25px rgba(229, 93, 135, 0.5);
+}
+.button-first:active {
+  background: linear-gradient(
+    to right,
+    rgba(229, 93, 135, 0.9),
+    rgba(95, 195, 228, 0.9)
+  );
+}
+
+.button-second {
+  background: linear-gradient(to right, #1488cc, #2b32b2);
+  box-shadow: 0 2px 25px rgba(20, 137, 204, 0.5);
+}
+.button-second:active {
+  background: linear-gradient(
+    to right,
+    rgba(20, 136, 204, 0.9),
+    rgba(43, 50, 178, 0.9)
+  );
+}
+
+particle {
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  position: fixed;
+  opacity: 0;
+  z-index: 9999;
+}
