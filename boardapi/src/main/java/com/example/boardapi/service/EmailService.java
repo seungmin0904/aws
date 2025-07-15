@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
 @Service
@@ -17,6 +18,7 @@ public class EmailService {
 
     private final EmailVerificationTokenRepository tokenRepository;
     private final JavaMailSender mailSender;
+    private static final ZoneId KOREA_ZONE = ZoneId.of("Asia/Seoul");
 
     @Transactional
     public EmailVerificationToken sendVerificationCode(String email) {
@@ -27,7 +29,8 @@ public class EmailService {
         EmailVerificationToken token = EmailVerificationToken.builder()
                 .username(email)
                 .token(code)
-                .expiryDate(LocalDateTime.now().plusMinutes(3))
+                .expiryDate(LocalDateTime.now(
+                        KOREA_ZONE).plusMinutes(3))
                 .verified(false)
                 .build();
 
@@ -43,8 +46,10 @@ public class EmailService {
     }
 
     public boolean verifyCode(String email, String code) {
+        LocalDateTime now = LocalDateTime.now(KOREA_ZONE);
         EmailVerificationToken token = tokenRepository
-                .findByUsernameAndTokenAndVerifiedFalseAndExpiryDateAfter(email, code, LocalDateTime.now())
+                .findByUsernameAndTokenAndVerifiedFalseAndExpiryDateAfter(email, code,
+                        now)
                 .orElse(null);
 
         if (token != null) {

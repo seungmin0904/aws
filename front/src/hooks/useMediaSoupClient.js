@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import * as mediasoupClient from 'mediasoup-client';
 
-const SERVER_URL = 'https://serverpro.kro.kr';
+const SERVER_URL = 'https://serverpro.kro.kr:4000';
 
 export default function useMediasoupClient(userId, nickname) {
   const socketRef = useRef(null);
@@ -21,13 +21,14 @@ const [speakingUserIds, setSpeakingUserIds] = useState(new Set());
 
   const iceServers = [
     {
-      urls: "turn:52.65.37.11:3478",
+      urls: "turn:3.35.114.7:3478",
       username: "testuser",
       credential: "testpass"
     }
   ];
-
+  
   useEffect(() => {
+     if (!userId || !nickname) return;
     socketRef.current = io(SERVER_URL, {
   path: '/socket.io',
   transports: ['websocket'],

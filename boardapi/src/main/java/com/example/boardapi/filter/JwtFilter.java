@@ -1,6 +1,7 @@
 package com.example.boardapi.filter;
 
 import java.io.IOException;
+import java.util.Set;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -27,6 +28,23 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    private static final Set<String> PUBLIC_URIS = Set.of(
+            "/api/members/login",
+            "/api/members/register",
+            "/api/members/check-nickname",
+            "/api/members/find-id",
+            "/api/members/password/reset",
+            "/api/auth/refresh",
+            "/api/auth/email/send",
+            "/api/auth/email/verify",
+            "/api/auth/email/find-id",
+            "/error");
+
+    private boolean isPublicUri(String uri) {
+        // 정확히 일치 또는 시작 경로가 PUBLIC_URIS에 포함되면 허용
+        return PUBLIC_URIS.stream().anyMatch(uri::startsWith);
+    }
+
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -35,9 +53,12 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String uri = request.getRequestURI();
+        if (uri.startsWith("/ws-chat")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-        // 퍼밋 경로는 토큰 검사 생략
-        if ("/api/members/login".equals(uri) || "/api/members/register".equals(uri) || "/auth/refresh".equals(uri)) {
+        if (isPublicUri(uri)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -58,20 +79,26 @@ public class JwtFilter extends OncePerRequestFilter {
                     String refreshToken = refreshHeader.substring(7);
 
                     if (jwtTokenProvider.validateRefreshToken(refreshToken)) {
-                        // 새 엑세스 토큰 발급
                         String newAccessToken = jwtTokenProvider.generateAccessTokenFromRefresh(refreshToken);
                         Authentication auth = jwtTokenProvider.getAuthentication(newAccessToken);
                         setAuth(auth, request);
-
-                        // 응답 헤더에 새 엑세스 토큰 추가
                         response.setHeader("Authorization", "Bearer " + newAccessToken);
                     } else {
                         log.warn("❌ Invalid Refresh Token for URI {}: {}", uri, refreshToken);
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        return;
                     }
                 } else {
                     log.warn("❌ Invalid or expired JWT for URI {}: {}", uri, token);
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
                 }
             }
+        } else {
+            // ✅ Authorization 헤더가 없고, 보호된 경로일 경우 -> 명시적으로 401 처리
+            log.warn("❌ Missing Authorization header for protected URI {}", uri);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
         }
 
         filterChain.doFilter(request, response);

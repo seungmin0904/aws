@@ -1,5 +1,7 @@
 package com.example.boardapi.config;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -37,59 +39,42 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors(Customizer.withDefaults())
-                .csrf(csrf -> csrf.disable()) // CSRF 비활성화 (REST API용)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 안씀
-                .authorizeHttpRequests(auth -> auth
-                        // WebSocket/STOMP endpoints
-                        .requestMatchers("/ws-chat/**", "/app/**", "/topic/**", "/auth/refresh").permitAll()
 
-                        .requestMatchers("/api/members/register", "/api/members/login", "/error").permitAll() // 회원가입/로그인
-                                                                                                              // 허용
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/ws-chat", "/ws-chat/**", "/app/**", "/topic/**", "/auth/refresh").permitAll()
+
+                        .requestMatchers(
+                                "/api/members/register",
+                                "/api/members/login",
+                                "/api/auth/email/send",
+                                "/api/auth/email/verify",
+                                "/api/auth/email/find-id", "/error")
+                        .permitAll()
+
                         .requestMatchers(HttpMethod.PUT, "/api/members/password/reset", "/api/members/password")
                         .permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/boards/**", "/api/replies/**",
                                 "/api/members/check-nickname", "/api/members/find-id")
                         .permitAll()
-
-                        .requestMatchers("/api/chatrooms/**").authenticated() // 채팅 rest api
+                        .requestMatchers("/api/chatrooms/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/members/mypage").authenticated()
-
                         .requestMatchers(HttpMethod.POST, "/api/boards", "/api/replies/**", "/api/members/mypage")
                         .authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/boards/**", "/api/replies/**", "/api/members/mypage",
                                 "/api/members/nickname")
                         .authenticated()
-
                         .requestMatchers(HttpMethod.DELETE, "/api/boards/**", "/api/replies/**", "/api/members/mypage")
                         .authenticated()
                         .anyRequest().permitAll())
-                .formLogin(form -> form.disable()) // 폼로그인 비활성화 (HTML UI 미사용)
+                .formLogin(form -> form.disable())
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
-                .userDetailsService(userDetailsService) // 사용자 정보 서비스 등록
-                // JWT 인증 실패 401 처리
+                .userDetailsService(userDetailsService)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint));
 
         return http.build();
-    }
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5174",
-                                "http://52.65.37.11",
-                                "http://52.65.37.11:5173",
-                                "http://serverpro.kro.kr", // 추가
-                                "http://www.serverpro.kro.kr", // 선택적으로 www 포함도 고려
-                                "http://serverpro.kro.kr:5173") // React 개발 서버 주소
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
-            }
-        };
     }
 
     //

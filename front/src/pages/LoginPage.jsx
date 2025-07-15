@@ -2,10 +2,10 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { useToast } from "@/hooks/use-toast";
-import axiosInstance from "@/lib/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import FindAccountModal from "@/components/ui/FindAccountModal";
+import axios from "axios";
 
 const LoginPage = ({ onLogin }) => {
   const { register, handleSubmit } = useForm();
@@ -15,10 +15,19 @@ const LoginPage = ({ onLogin }) => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axiosInstance.post("/members/login", {
-        username: data.username,    // 이메일로 로그인
-        password: data.password,
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/members/login`,
+        {
+          username: data.username, // 이메일
+          password: data.password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true, // 쿠키 인증이나 CORS 정책 대응시 필요
+        }
+      );
 
       const result = response.data;
 
@@ -26,38 +35,39 @@ const LoginPage = ({ onLogin }) => {
         localStorage.setItem("token", result.token);
         localStorage.setItem("username", result.username); // 이메일
         localStorage.setItem("name", result.name);         // 닉네임
-        localStorage.setItem("refresh_token", response.data.refreshToken);
-        
+        localStorage.setItem("refresh_token", result.refreshToken);
+
         toast({
           title: "로그인 성공 🎉",
           description: `${result.name}님 환영합니다!`,
         });
 
         onLogin(result.token);
-          navigate("/");    
+        navigate("/");
       } else {
         throw new Error("서버가 사용자 정보를 반환하지 않았습니다.");
       }
     } catch (error) {
       if (error.response?.status === 401 || error.response?.status === 403) {
-    toast({
-      title: "인증 오류",
-      description: "이메일 또는 비밀번호가 올바르지 않습니다.",
-      variant: "destructive",
-    });
-  } else if (error.response?.status >= 500) {
-    toast({
-      title: "서버 점검 중",
-      description:"",
-      variant: "destructive",
-    });
-  } else {
-    toast({
-      title: "로그인 실패",
-      description: error.message || "예상치 못한 오류가 발생했습니다.",
-      variant: "destructive",
-    });
-  }
+        toast({
+          title: "인증 오류",
+          description: "이메일 또는 비밀번호가 올바르지 않습니다.",
+          variant: "destructive",
+        });
+      } else if (error.response?.status >= 500) {
+        toast({
+          title: "서버 점검 중",
+          description: "",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "로그인 실패",
+          description: error.message || "예상치 못한 오류가 발생했습니다.",
+          variant: "destructive",
+        });
+      }
+
       onLogin(null);
       console.error("로그인 에러:", error);
     }
@@ -66,7 +76,6 @@ const LoginPage = ({ onLogin }) => {
   return (
     <div className="flex min-h-screen items-start justify-center text-white bg-gray-50 dark:bg-[#18181b]">
       <div className="mt-32">
-        {/* 상단 영역: 로고/이름/소개 */}
         <div className="flex flex-col items-center mb-10">
           <h1 className="text-3xl font-bold tracking-tight mb-1 text-gray-900 dark:text-white">
             Simple Board
@@ -98,19 +107,16 @@ const LoginPage = ({ onLogin }) => {
               로그인
             </Button>
           </form>
-          {/* 아이디/비번 찾기 버튼 영역 */}
           <div className="flex justify-between mt-5 text-sm">
             <button
-              className="px-3 py-1 rounded bg-white hover:bg-blue-100 text-blue-500
-               dark:bg-zinc-900 dark:hover:bg-zinc-700 dark:text-blue-400"
+              className="px-3 py-1 rounded bg-white hover:bg-blue-100 text-blue-500 dark:bg-zinc-900 dark:hover:bg-zinc-700 dark:text-blue-400"
               onClick={() => setFindMode("id")}
               type="button"
             >
               아이디 찾기
             </button>
             <button
-              className="px-3 py-1 rounded bg-white hover:bg-blue-100 text-blue-500
-               dark:bg-zinc-900 dark:hover:bg-zinc-700 dark:text-blue-400"
+              className="px-3 py-1 rounded bg-white hover:bg-blue-100 text-blue-500 dark:bg-zinc-900 dark:hover:bg-zinc-700 dark:text-blue-400"
               onClick={() => setFindMode("pw")}
               type="button"
             >
@@ -120,15 +126,13 @@ const LoginPage = ({ onLogin }) => {
           <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-300">
             아직 회원이 아니신가요?{" "}
             <button
-              className="px-3 py-1 rounded bg-white hover:bg-blue-100 text-blue-500
-               dark:bg-zinc-900 dark:hover:bg-zinc-700 dark:text-blue-400"
+              className="px-3 py-1 rounded bg-white hover:bg-blue-100 text-blue-500 dark:bg-zinc-900 dark:hover:bg-zinc-700 dark:text-blue-400"
               onClick={() => navigate("/register")}
               type="button"
             >
               회원가입
             </button>
           </div>
-          {/* 모달 */}
           {findMode && (
             <FindAccountModal mode={findMode} onClose={() => setFindMode(null)} />
           )}
@@ -137,6 +141,5 @@ const LoginPage = ({ onLogin }) => {
     </div>
   );
 };
-
 
 export default LoginPage;

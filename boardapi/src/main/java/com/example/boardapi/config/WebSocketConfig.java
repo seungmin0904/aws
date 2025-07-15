@@ -34,12 +34,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry
                 .addEndpoint("/ws-chat")
                 // .addInterceptors(handshakeInterceptor) // ← 여기
-                .setAllowedOriginPatterns("http://localhost:5174",
-                        "http://52.65.37.11",
-                        "http://52.65.37.11:5173",
-                        "http://serverpro.kro.kr", // 추가
-                        "http://www.serverpro.kro.kr",
-                        "http://serverpro.kro.kr:5173");
+                .setAllowedOriginPatterns("https://serverpro.kro.kr");
 
     }
 
