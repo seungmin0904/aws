@@ -83,6 +83,9 @@ function realtimeReducer(state, action) {
         loadingServerMembers: newSet,
       };
     }
+    case 'RESET':
+    return { ...initialState };
+    
     default:
       return state;
   }

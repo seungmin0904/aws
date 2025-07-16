@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { useLogout } from "@/hooks/useLogout";
 import "@/styles/atom-button.css";
 import "@/styles/NeonButton.css";
-import ParticleButton from "@/components/ui/ParticleButton";
+
 
 const Navbar = () => {
   const logout = useLogout();

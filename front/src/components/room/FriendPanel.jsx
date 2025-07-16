@@ -67,7 +67,7 @@ export default function FriendPanel() {
     if (!search.trim()) return;
     setResult([]);
     setAdding(true);
-    axios
+    axiosInstance
       .get(`/members/search?name=${encodeURIComponent(search)}`)
       .then((res) => {
         setResult(res.data || []);

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import * as mediasoupClient from 'mediasoup-client';
 
-const SERVER_URL = 'https://serverpro.kro.kr:4000';
+const SERVER_URL = 'https://serverpro.kro.kr';
 
 export default function useMediasoupClient(userId, nickname) {
   const socketRef = useRef(null);
@@ -16,7 +16,7 @@ export default function useMediasoupClient(userId, nickname) {
   const streamRef = useRef(null);
   const micIntervalRef = useRef(null);
   const [micVolume, setMicVolume] = useState(0); // 0~100
-const [speakingUserIds, setSpeakingUserIds] = useState(new Set());
+  const [speakingUserIds, setSpeakingUserIds] = useState(new Set());
   const [voiceParticipantsMap, setVoiceParticipantsMap] = useState(new Map());
 
   const iceServers = [

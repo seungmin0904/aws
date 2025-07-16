@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axiosInstance from '@/lib/axiosInstance';
 import { useNavigate } from "react-router-dom";
 import { useUser } from "@/context/UserContext";
+import { useRealtime } from "@/context/RealtimeContext";
 
 export default function FriendDropdown({ userId, userName, x, y, onClose, onSelectDMRoom }) {
   const [status, setStatus] = useState("LOADING");

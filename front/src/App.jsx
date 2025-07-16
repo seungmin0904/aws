@@ -64,13 +64,7 @@ function App() {
     }
   };
 
-  const handleLogout = () => {
-    ws.disconnect();
-    localStorage.clear();
-    setToken(null);
-    setUser(null);
-    window.location.href = "/login";
-  };
+  
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -83,7 +77,7 @@ function App() {
               <Toaster />
               <HashRouter>
                 <Routes>
-                  <Route path="/" element={<RootLayout onLogout={handleLogout} />}>
+                  <Route path="/" element={<RootLayout />}>
                     <Route index element={<Layout />} />
                     <Route path="posts" element={<PostListPage />} />
                     <Route path="posts/new" element={<PostFormPage />} />
