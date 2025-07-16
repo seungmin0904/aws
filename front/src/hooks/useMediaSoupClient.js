@@ -55,8 +55,11 @@ export default function useMediasoupClient(userId, nickname) {
       setVoiceParticipantsMap(new Map(participantsRef.current));
     });
 
-    socketRef.current.on('newProducer', async ({ producerId }) => {
-      console.log("🎧 New producer detected:", producerId);
+    socketRef.current.on('newProducer', async ({ producerId, userId: producerUserId }) => {
+      if (producerUserId === userId) {
+      console.log("⛔️ Skipping own audio for userId match:", producerUserId);
+      return;
+      }
       await consumeSpecificAudio(producerId);
     });
 
@@ -251,6 +254,7 @@ export default function useMediasoupClient(userId, nickname) {
 
           socketRef.current.emit('getProducers', async (producerIds) => {
             for (const producerId of producerIds) {
+              if (producerRef.current?.id === producerId) continue;
               console.log("📦 Found existing producer:", producerId);
               await consumeSpecificAudio(producerId);
             }
@@ -265,6 +269,8 @@ export default function useMediasoupClient(userId, nickname) {
   };
 
   const consumeSpecificAudio = async (producerId) => {
+    if (producerRef.current?.id === producerId) return;
+    
     if (!recvTransportRef.current) {
       console.warn("⚠️ recvTransportRef is null at consume time");
       return;

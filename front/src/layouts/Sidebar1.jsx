@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosInstance from '@/lib/axiosInstance';
 import { toast } from "@/hooks/use-toast";
+import { useUser } from "@/context/UserContext";
 
 export default function Sidebar1({ onSelectDM, onSelectServer, onLeaveOrDeleteServer }) {
   const [servers, setServers] = useState([]);
@@ -8,14 +9,16 @@ export default function Sidebar1({ onSelectDM, onSelectServer, onLeaveOrDeleteSe
   const [showJoin, setShowJoin] = useState(false);
   const [serverName, setServerName] = useState("");
   const [joinCode, setJoinCode] = useState("");
-
+  const { user } = useUser();
   const fetchServers = () =>
     axiosInstance.get("/servers/my").then(res => setServers(res.data));
 
   useEffect(() => {
+  if (user?.id && user?.token) {
     fetchServers();
-  }, []);
-
+  }
+  }, [user]);
+  
   // 서버 개설
   const handleCreate = async () => {
     if (!serverName.trim()) return;
