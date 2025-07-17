@@ -67,7 +67,9 @@
       "icon": "electron/icon.png",
       "sign": false
     },
-    "mac": null,
+   "mac": {
+    "target": []
+  },
     "nsis": {
       "oneClick": false,
       "perMachine": true,
