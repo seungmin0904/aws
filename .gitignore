@@ -8,6 +8,8 @@ node_modules/
 # 빌드 결과물 무시 (Vite, Webpack 등 사용 시)
 dist/
 build/
+dist-electron/
+*.png
 
 # 환경 변수 파일 무시
 .env

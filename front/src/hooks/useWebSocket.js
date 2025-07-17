@@ -74,6 +74,10 @@ export const useWebSocket = (token) => {
     const client = Stomp.over(socket);
     client.debug = () => {};
 
+    // stomp 연결 감지 ping 
+    client.heartbeat.outgoing = 10000; // 클라이언트 → 서버
+    client.heartbeat.incoming = 10000; // 서버 → 클라이언트
+
     if (stompRef.current) {
       try {
         console.log("🧹 이전 STOMP 인스턴스 정리 중...");

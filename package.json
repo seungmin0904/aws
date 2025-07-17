@@ -64,8 +64,10 @@
     "extraResources": [],
     "win": {
       "target": "nsis",
-      "icon": "electron/icon.png"
+      "icon": "electron/icon.png",
+      "sign": false
     },
+    "mac": null,
     "nsis": {
       "oneClick": false,
       "perMachine": true,
