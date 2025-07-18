@@ -15,8 +15,8 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.0",
-    "electron": "^29.0.0",
-    "electron-builder": "^24.9.1",
+    "electron": "29.4.6",
+    "electron-builder": "^24.3.0",
     "wait-on": "^7.2.0"
   },
   "dependencies": {
@@ -57,19 +57,23 @@
       "output": "dist-electron"
     },
     "files": [
-      "electron/**/*",
-      "front/dist/**/*",
-      "package.json"
-    ],
+  "electron/**/*",
+  {
+    "from": "front/dist",
+    "to": "dist",
+    "filter": ["**/*"]
+  },
+  "package.json"
+],
     "extraResources": [],
     "win": {
       "target": "nsis",
       "icon": "electron/icon.png",
-      "sign": false
+      "signAndEditExecutable": false
     },
-   "mac": {
-    "target": []
-  },
+    "mac": {
+      "identity": null
+    },
     "nsis": {
       "oneClick": false,
       "perMachine": true,

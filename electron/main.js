@@ -36,9 +36,9 @@ function createWindow() {
   // });
 
   // ✅ 프로덕션용 파일 로드
-  mainWindow.loadFile(path.join(__dirname, 'dist', 'index.html')).catch(err => {
-    console.error("❌ index.html 로드 실패:", err);
-  });
+ mainWindow.loadFile(path.join(__dirname, '..', 'front', 'dist', 'index.html')).catch(err => {
+  console.error("❌ index.html 로드 실패:", err);
+});
 
   mainWindow.on('close', e => {
     e.preventDefault();
