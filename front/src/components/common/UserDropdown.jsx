@@ -3,6 +3,7 @@ import axiosInstance from '@/lib/axiosInstance';
 import { useNavigate } from "react-router-dom";
 import { useUser } from "@/context/UserContext";
 import { useRealtime } from "@/context/RealtimeContext";
+import "@/styles/neonDropdown.scss";
 
 export default function FriendDropdown({ userId, userName, x, y, onClose, onSelectDMRoom }) {
   const [status, setStatus] = useState("LOADING");
@@ -85,115 +86,100 @@ export default function FriendDropdown({ userId, userName, x, y, onClose, onSele
 
   const statusInfo = getStatusInfo();
 
-  return (
+ return (
     <>
-      {/* 배경 오버레이 */}
-      <div 
-        className="fixed inset-0 z-40"
-        onClick={onClose}
-      />
-      
-      {/* 드롭다운 메뉴 */}
-      <div
-        className="fixed z-50 bg-[#18191c] text-white rounded-lg shadow-2xl border border-[#2f3136] min-w-[200px] overflow-hidden"
-        style={{ left: x, top: y }}
-      >
-        {/* 헤더 */}
-        <div className="px-3 py-3 bg-[#2f3136] border-b border-[#3f4147]">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[#5865f2] rounded-full flex items-center justify-center text-white font-bold text-sm">
-              {userName.charAt(0).toUpperCase()}
-            </div>
-            <div className="flex-1">
-              <div className="font-semibold text-[#f2f3f5] text-sm">{userName}</div>
-              <div className="text-xs text-[#b9bbbe]">사용자</div>
-            </div>
-          </div>
-        </div>
+      <div className="fixed inset-0 z-40" onClick={onClose} />
+      <div id="menu" className="fixed z-50 open" style={{ left: x, top: y }}>
+        {/* ✨ 효과 요소 */}
+        <span className="glow"></span>
+        <span className="glow glow-bottom glow-bright"></span>
+        <span className="shine"></span>
+        <span className="shine shine-bottom"></span>
 
-        {/* 메뉴 아이템들 */}
-        <div className="py-2">
-          {/* 1:1 대화 시작 버튼 */}
-          <button
-            className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[#b9bbbe] hover:bg-[#4752c4] hover:text-white transition-colors duration-150 group"
-            onClick={handleStartDM}
-          >
-            <span className="text-base">💬</span>
-            <span className="font-medium">메시지 보내기</span>
-          </button>
-
-          {/* 친구 상태에 따른 버튼 */}
-          {status === "NONE" && (
-            <button
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[#b9bbbe] hover:bg-[#3ba55d] hover:text-white transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={handleAddFriend}
-              disabled={loading}
-            >
-              <span className="text-base">👤</span>
-              <span className="font-medium">
-                {loading ? "신청 중..." : "친구 추가"}
-              </span>
-              {loading && (
-                <div className="ml-auto">
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+        <div className="inner">
+          <section>
+            <header>
+              <div className="flex items-center gap-2 px-1 py-2">
+                <div className="w-8 h-8 bg-[#5865f2] rounded-full flex items-center justify-center text-white font-bold text-sm">
+                  {userName.charAt(0).toUpperCase()}
                 </div>
+                <div className="flex flex-col text-sm">
+                  <span className="font-semibold text-[#f2f3f5]">{userName}</span>
+                  <span className="text-xs text-[#b9bbbe]">사용자</span>
+                </div>
+              </div>
+            </header>
+
+            <ul>
+              {/* 메시지 */}
+              <li onClick={handleStartDM}>
+                <span className="text-base">💬</span>
+                <span className="font-medium">메시지 보내기</span>
+              </li>
+
+              {/* 친구 추가 */}
+              {status === "NONE" && (
+                <li onClick={handleAddFriend} className={loading ? "opacity-50 cursor-not-allowed" : ""}>
+                  <span className="text-base">👤</span>
+                  <span className="font-medium">
+                    {loading ? "신청 중..." : "친구 추가"}
+                  </span>
+                  {loading && (
+                    <div className="ml-auto">
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    </div>
+                  )}
+                </li>
               )}
-            </button>
-          )}
 
-          {/* 친구 상태 표시 */}
-          {status !== "NONE" && status !== "LOADING" && (
-            <div className={`flex items-center gap-3 px-3 py-2 text-sm ${statusInfo.color} cursor-default`}>
-              <span className="text-base">{statusInfo.icon}</span>
-              <span className="font-medium">{statusInfo.text}</span>
+              {/* 친구 상태 */}
+              {status !== "NONE" && status !== "LOADING" && (
+                <li className={`${statusInfo.color} cursor-default`}>
+                  <span className="text-base">{statusInfo.icon}</span>
+                  <span className="font-medium">{statusInfo.text}</span>
+                </li>
+              )}
+
+              {/* 로딩 상태 */}
+              {status === "LOADING" && (
+                <li className="text-[#b9bbbe] cursor-default">
+                  <div className="w-4 h-4 border-2 border-[#b9bbbe]/30 border-t-[#b9bbbe] rounded-full animate-spin"></div>
+                  <span className="font-medium">상태 확인 중...</span>
+                </li>
+              )}
+
+              <hr />
+
+              {/* ID 복사 */}
+              <li onClick={() => {
+                navigator.clipboard.writeText(`사용자 ID: ${userId}`);
+                onClose();
+              }}>
+                <span className="text-base">📋</span>
+                <span className="font-medium">ID 복사</span>
+              </li>
+
+              {/* 신고 */}
+              <li className="text-[#f23f43]" onClick={() => {
+                console.log("신고 기능");
+                onClose();
+              }}>
+                <span className="text-base">⚠️</span>
+                <span className="font-medium">신고</span>
+              </li>
+            </ul>
+          </section>
+
+          {/* 에러 메시지 */}
+          {err && (
+            <div className="px-3 py-2 bg-[#f23f43]/10 border-t border-[#f23f43]/20">
+              <div className="flex items-center gap-2 text-[#f23f43] text-sm">
+                <span>❌</span>
+                <span>{err}</span>
+              </div>
             </div>
           )}
-
-          {/* 로딩 상태 */}
-          {status === "LOADING" && (
-            <div className="flex items-center gap-3 px-3 py-2 text-sm text-[#b9bbbe]">
-              <div className="w-4 h-4 border-2 border-[#b9bbbe]/30 border-t-[#b9bbbe] rounded-full animate-spin"></div>
-              <span className="font-medium">상태 확인 중...</span>
-            </div>
-          )}
-
-          {/* 구분선 */}
-          <div className="my-1 mx-2 h-px bg-[#3f4147]"></div>
-
-          {/* 추가 옵션들 */}
-          <button
-            className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[#b9bbbe] hover:bg-[#36393f] hover:text-white transition-colors duration-150"
-            onClick={() => {
-              navigator.clipboard.writeText(`사용자 ID: ${userId}`);
-              onClose();
-            }}
-          >
-            <span className="text-base">📋</span>
-            <span className="font-medium">ID 복사</span>
-          </button>
-
-          <button
-            className="w-full flex items-center gap-3 px-3 py-2 text-sm text-[#f23f43] hover:bg-[#f23f43] hover:text-white transition-colors duration-150"
-            onClick={() => {
-              // 신고 기능은 추후 구현
-              console.log("신고 기능");
-              onClose();
-            }}
-          >
-            <span className="text-base">⚠️</span>
-            <span className="font-medium">신고</span>
-          </button>
         </div>
-
-        {/* 에러 메시지 */}
-        {err && (
-          <div className="px-3 py-2 bg-[#f23f43]/10 border-t border-[#f23f43]/20">
-            <div className="flex items-center gap-2 text-[#f23f43] text-sm">
-              <span>❌</span>
-              <span>{err}</span>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );

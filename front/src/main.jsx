@@ -1,5 +1,4 @@
 import "@toast-ui/editor/dist/toastui-editor.css";
-import "@/styles/login.css";
 import "./index.css";
 import React from "react";
 import { createRoot } from "react-dom/client";  // ← 여기!

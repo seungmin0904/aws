@@ -138,11 +138,11 @@ const RegisterPage = () => {
   // RegisterPage.jsx
 return (
   <div className="min-h-screen pt-32 px-4 flex items-start justify-center 
-                  bg-white dark:bg-[#18181b] text-black dark:text-white transition-colors">
+                  bg-white [#18181b] text-black  transition-colors">
     <Card className="w-[520px] rounded-2xl shadow-xl py-12 px-10 flex flex-col justify-center 
-                    border border-zinc-200 bg-white dark:bg-[#18181b] text-black dark:text-white transition-colors">
+                    border border-zinc-200 bg-white [#18181b] text-black  transition-colors">
       <CardHeader className="pb-4">
-        <CardTitle className="text-3xl font-bold text-center mb-1 text-gray-900 dark:text-white">
+        <CardTitle className="text-3xl font-bold text-center mb-1 text-gray-900 ">
           회원가입
         </CardTitle>
       </CardHeader>
@@ -161,9 +161,9 @@ return (
                 onChange={handleChange}
                 required
                 className="h-12 text-lg flex-1 
-                placeholder:text-gray-400 dark:placeholder:text-gray-500 
-                bg-white dark:bg-[#18181b] 
-                text-black dark:text-white transition-colors"
+                placeholder:text-gray-400  
+                bg-white [#18181b] 
+                text-black transition-colors"
                 placeholder="아이디를 입력하세요"
               />
               <Button
@@ -195,9 +195,9 @@ return (
                 onChange={handleChange}
                 required
                 className="h-12 text-lg flex-1 
-                placeholder:text-gray-400 dark:placeholder:text-gray-500 
-                bg-white dark:bg-[#18181b] 
-                text-black dark:text-white transition-colors"
+                placeholder:text-gray-400  
+                bg-white [#18181b] 
+                text-black transition-colors"
                 placeholder="아이디/비밀번호 찾기 용"
               />
               <Button
@@ -232,7 +232,7 @@ return (
                       value={form.code}
                       onChange={handleChange}
                       required
-                      className="h-12 text-lg flex-1 bg-white dark:bg-[#18181b] text-black dark:text-white transition-colors"
+                      className="h-12 text-lg flex-1 bg-white [#18181b] text-black transition-colors"
                     />
                     <Button
                       type="button"
@@ -265,8 +265,8 @@ return (
               value={form.password}
               onChange={handleChange}
               required
-              className="h-12 text-lg placeholder:text-gray-400 dark:placeholder:text-gray-500 
-              bg-white dark:bg-[#18181b] text-black dark:text-white transition-colors"
+              className="h-12 text-lg placeholder:text-gray-400  
+              bg-white [#18181b] text-black transition-colors"
               placeholder="비밀번호를 입력하세요"
             />
           </div>

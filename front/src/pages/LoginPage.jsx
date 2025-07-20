@@ -1,11 +1,10 @@
 import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/Button";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import FindAccountModal from "@/components/ui/FindAccountModal";
 import axios from "axios";
+import "@/styles/login.css";
 
 const LoginPage = ({ onLogin }) => {
   const { register, handleSubmit } = useForm();
@@ -18,14 +17,14 @@ const LoginPage = ({ onLogin }) => {
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/members/login`,
         {
-          username: data.username, // 이메일
+          username: data.username,
           password: data.password,
         },
         {
           headers: {
             "Content-Type": "application/json",
           },
-          withCredentials: true, // 쿠키 인증이나 CORS 정책 대응시 필요
+          withCredentials: true,
         }
       );
 
@@ -33,8 +32,8 @@ const LoginPage = ({ onLogin }) => {
 
       if (result.token && result.username && result.name) {
         localStorage.setItem("token", result.token);
-        localStorage.setItem("username", result.username); // 이메일
-        localStorage.setItem("name", result.name);         // 닉네임
+        localStorage.setItem("username", result.username);
+        localStorage.setItem("name", result.name);
         localStorage.setItem("refresh_token", result.refreshToken);
 
         toast({
@@ -74,68 +73,81 @@ const LoginPage = ({ onLogin }) => {
   };
 
   return (
-    <div className="flex min-h-screen items-start justify-center text-white bg-gray-50 dark:bg-[#18181b]">
-      <div className="mt-32">
-        <div className="flex flex-col items-center mb-10">
-          <h1 className="text-3xl font-bold tracking-tight mb-1 text-gray-900 dark:text-white">
-            Simple Board
-          </h1>
-          <p className="text-gray-500 dark:text-gray-300 text-base">
-            누구나 쉽고 빠르게 글을 남기는 공간
-          </p>
-        </div>
-        <div className="w-[400px] py-10 px-6 border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 rounded-2xl shadow-xl">
-          <h2 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">
-            로그인
-          </h2>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <Input
-              placeholder="이메일"
-              type="email"
-              autoComplete="username"
-              {...register("username", { required: true })}
-              className="h-12 text-lg placeholder:text-gray-400 placeholder:opacity-80"
-            />
-            <Input
-              placeholder="비밀번호"
-              type="password"
-              autoComplete="current-password"
-              {...register("password", { required: true })}
-              className="h-12 text-lg placeholder:text-gray-400 placeholder:opacity-80"
-            />
-            <Button type="submit" className="w-full h-12 text-lg mt-2 rounded-xl bg-[#4EA685] text-white hover:bg-[#3f8f71] ">
-              로그인
-            </Button>
-          </form>
-          <div className="flex justify-between mt-5 text-sm">
-            <button
-              className="px-3 py-1 rounded bg-white hover:bg-blue-100 text-blue-500 dark:bg-zinc-900 dark:hover:bg-zinc-700 dark:text-blue-400"
-              onClick={() => setFindMode("id")}
-              type="button"
-            >
-              아이디 찾기
-            </button>
-            <button
-              className="px-3 py-1 rounded bg-white hover:bg-blue-100 text-blue-500 dark:bg-zinc-900 dark:hover:bg-zinc-700 dark:text-blue-400"
-              onClick={() => setFindMode("pw")}
-              type="button"
-            >
-              비밀번호 찾기
-            </button>
+    <div className="w-screen h-screen flex items-center justify-center bg-white relative overflow-hidden">
+      {/* 우측 그라데이션 배경 */}
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#fbe6ff] to-white z-0" />
+
+      {/* 로그인 박스 */}
+      <div className="relative z-10">
+        <div className="screen shadow-2xl rounded-xl overflow-hidden">
+          <div className="screen__content">
+            <form onSubmit={handleSubmit(onSubmit)} className="login">
+              <div className="login__field">
+                <i className="login__icon fas fa-user"></i>
+                <input
+                  type="email"
+                  placeholder="username"
+                  className="login__input"
+                  autoComplete="username"
+                  {...register("username", { required: true })}
+                />
+              </div>
+              <div className="login__field">
+                <i className="login__icon fas fa-lock"></i>
+                <input
+                  type="password"
+                  placeholder="password"
+                  className="login__input"
+                  autoComplete="current-password"
+                  {...register("password", { required: true })}
+                />
+              </div>
+              <button type="submit" className="button login__submit">
+                <span className="button__text">Login now</span>
+                <i className="button__icon fas fa-chevron-right"></i>
+              </button>
+            </form>
+            
+            <div className="mt-24 text-center text-sm text-white">
+              아직 회원이 아니신가요?{" "}
+              <button
+                className="underline hover:text-gray-200"
+                onClick={() => navigate("/register")}
+                type="button"
+              >
+                회원가입
+              </button>
+            </div>
+
+            <div className="flex justify-center gap-20 mt-6 text-sm text-white">
+              <button
+                className="hover:underline"
+                onClick={() => setFindMode("id")}
+                type="button"
+              >
+                아이디 찾기
+              </button>
+              <button
+                className="hover:underline"
+                onClick={() => setFindMode("pw")}
+                type="button"
+              >
+                비밀번호 찾기
+              </button>
+            </div>
+
+            {findMode && (
+              <FindAccountModal mode={findMode} onClose={() => setFindMode(null)} />
+            )}
           </div>
-          <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-300">
-            아직 회원이 아니신가요?{" "}
-            <button
-              className="px-3 py-1 rounded bg-white hover:bg-blue-100 text-blue-500 dark:bg-zinc-900 dark:hover:bg-zinc-700 dark:text-blue-400"
-              onClick={() => navigate("/register")}
-              type="button"
-            >
-              회원가입
-            </button>
+
+          {/* 배경 도형 */}
+          <div className="screen__background">
+            <span className="screen__background__shape screen__background__shape4"></span>
+            <span className="screen__background__shape screen__background__shape3"></span>
+            <span className="screen__background__shape screen__background__shape2"></span>
+            <span className="screen__background__shape screen__background__shape1"></span>
           </div>
-          {findMode && (
-            <FindAccountModal mode={findMode} onClose={() => setFindMode(null)} />
-          )}
         </div>
       </div>
     </div>

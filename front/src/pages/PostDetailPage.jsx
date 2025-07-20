@@ -41,13 +41,13 @@ const PostDetailPage = ({ name }) => {
   const { board } = data;
 
    return (
-    <div className="min-h-screen bg-white dark:bg-[#18181b] text-black dark:text-white px-4 py-10 flex flex-col items-center transition-colors">
+    <div className="min-h-screen bg-white [#18181b] text-black  px-4 py-10 flex flex-col items-center transition-colors">
       <div className="w-full flex flex-col items-center">
         {/* 본문 카드 */}
         <Card
           className="
-            rounded-2xl border border-zinc-300 dark:border-zinc-700 shadow
-            bg-white dark:bg-[#18181b] text-black dark:text-white
+            rounded-2xl border border-zinc-300  shadow
+            bg-white [#18181b] text-black 
             flex flex-col
             min-h-[900px]
             min-w-[1000px]
@@ -59,10 +59,10 @@ const PostDetailPage = ({ name }) => {
           style={{ boxSizing: "border-box" }}
         >
           <CardHeader className="pb-2">
-            <CardTitle className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">{board.title}</CardTitle>
-            <div className="text-sm text-zinc-500 dark:text-zinc-400 flex justify-between items-center">
+            <CardTitle className="text-3xl font-bold mb-2 text-gray-900 ">{board.title}</CardTitle>
+            <div className="text-sm text-zinc-500  flex justify-between items-center">
               <span>작성자 : {board.writerName}</span>
-              <span className="text-xs text-zinc-400 dark:text-zinc-500">
+              <span className="text-xs text-zinc-400 ">
                 {new Date(board.createdDate).toLocaleString("ko-KR", {
                   year: "numeric",
                   month: "2-digit",
@@ -75,7 +75,7 @@ const PostDetailPage = ({ name }) => {
           </CardHeader>
           <CardContent
             key={board.content}
-            className="flex-1 px-8 py-6 prose prose-zinc max-w-none text-black dark:text-white transition-colors"
+            className="flex-1 px-8 py-6 prose prose-zinc max-w-none text-black  transition-colors"
           >
             <div dangerouslySetInnerHTML={{ __html: board.content }} />
           </CardContent>
@@ -86,9 +86,9 @@ const PostDetailPage = ({ name }) => {
           <Button
             onClick={() => navigate("/posts/new")}
             variant="outline"
-            className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 
-            dark:bg-zinc-800 text-zinc-500 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 
-            hover:text-zinc-800 dark:hover:text-white"
+            className="rounded-xl border border-zinc-200  bg-zinc-50 
+             text-zinc-500  hover:bg-zinc-100  
+            hover:text-zinc-800 "
           >
             ✏️ 글쓰기
           </Button>
@@ -97,18 +97,18 @@ const PostDetailPage = ({ name }) => {
               <>
                 <Button
                   variant="outline"
-                  className="rounded-xl border border-green-200 dark:border-green-800 bg-green-50
-                   dark:bg-green-900 text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-800
-                    hover:text-green-800 dark:hover:text-white ml-2"
+                  className="rounded-xl border border-green-200  bg-green-50
+                    text-green-600  hover:bg-green-100 
+                    hover:text-green-800  ml-2"
                   onClick={() => navigate(`/posts/${bno}/edit`)}
                 >
                   수정
                 </Button>
                 <Button
                   variant="outline"
-                  className="rounded-xl border border-red-200 dark:border-red-800 bg-red-50 
-                  dark:bg-red-900 text-red-500 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-800 
-                  hover:text-red-800 dark:hover:text-white ml-2"
+                  className="rounded-xl border border-red-200  bg-red-50 
+                   text-red-500  hover:bg-red-100  
+                  hover:text-red-800  ml-2"
                   onClick={handleDelete}
                 >
                   삭제

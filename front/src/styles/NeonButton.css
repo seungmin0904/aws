@@ -79,3 +79,61 @@
   0% { bottom: -100%; }
   50%, 100% { bottom: 100%; }
 }
+
+.neon-btn.green {
+  color: white;
+  background-color: #4EA685;
+  box-shadow: 0 0 5px #4EA685,
+    0 0 25px #4EA685,
+    0 0 50px #4EA685,
+    0 0 100px #4EA685;
+  overflow: hidden;
+  position: relative;
+}
+
+.neon-btn.green span {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 애니메이션 라인을 더 밝은 색상으로 조정 */
+.neon-btn.green span:nth-child(1) {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #b5f7d3);
+  animation: animate1 1s linear infinite;
+}
+
+.neon-btn.green span:nth-child(2) {
+  top: -100%;
+  right: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, #b5f7d3);
+  animation: animate2 1s linear infinite;
+  animation-delay: 0.25s;
+}
+
+.neon-btn.green span:nth-child(3) {
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(270deg, transparent, #b5f7d3);
+  animation: animate3 1s linear infinite;
+  animation-delay: 0.5s;
+}
+
+.neon-btn.green span:nth-child(4) {
+  bottom: -100%;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(360deg, transparent, #b5f7d3);
+  animation: animate4 1s linear infinite;
+  animation-delay: 0.75s;
+}

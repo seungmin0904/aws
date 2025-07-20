@@ -111,13 +111,13 @@ const MyPage = () => {
 
   return (
     <div className="max-w-md mx-auto mt-24 space-y-8">
-      <h2 className="text-2xl font-bold text-center mb-8 text-gray-900 dark:text-white">
+      <h2 className="text-2xl font-bold text-center mb-8 text-gray-900 ">
         마이페이지
       </h2>
 
       {/* 닉네임 변경 */}
-      <div className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-6 shadow space-y-4">
-        <h3 className="font-semibold text-lg text-gray-900 dark:text-white">
+      <div className="rounded-xl border border-zinc-200  bg-white  p-6 shadow space-y-4">
+        <h3 className="font-semibold text-lg text-gray-900 ">
           닉네임 변경
         </h3>
         <div className="flex gap-2">
@@ -128,7 +128,7 @@ const MyPage = () => {
               setIsAvailable(null);
               setNicknameMsg("");
             }}
-            className="flex-1 bg-white dark:bg-zinc-800 text-gray-900 dark:text-white"
+            className="flex-1 bg-white  text-gray-900 "
             placeholder="닉네임 입력"
           />
           <Button variant="outline" onClick={checkNickname}>
@@ -155,10 +155,10 @@ const MyPage = () => {
 
       {/* 비밀번호 변경 */}
       <form
-        className="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-6 shadow space-y-4"
+        className="rounded-xl border border-zinc-200  bg-white  p-6 shadow space-y-4"
         onSubmit={handlePasswordChange}
       >
-        <h3 className="font-semibold text-lg text-gray-900 dark:text-white">
+        <h3 className="font-semibold text-lg text-gray-900 ">
           비밀번호 변경
         </h3>
         <Input
@@ -167,7 +167,7 @@ const MyPage = () => {
           value={currentPw}
           onChange={(e) => setCurrentPw(e.target.value)}
           required
-          className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-white"
+          className="bg-white  text-gray-900 "
         />
         <Input
           type="password"
@@ -175,7 +175,7 @@ const MyPage = () => {
           value={newPw}
           onChange={(e) => setNewPw(e.target.value)}
           required
-          className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-white"
+          className="bg-white  text-gray-900 "
         />
         <Input
           type="password"
@@ -183,7 +183,7 @@ const MyPage = () => {
           value={newPw2}
           onChange={(e) => setNewPw2(e.target.value)}
           required
-          className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-white"
+          className="bg-white  text-gray-900 "
         />
         {pwMsg && (
           <p className={`text-sm ${pwSuccess ? "text-green-500" : "text-red-500"}`}>

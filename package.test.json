@@ -1,0 +1,30 @@
+{
+  "appId": "com.example.electronapp.test",
+  "productName": "MyElectronAppTest",
+  "directories": {
+    "output": "dist-electron-test"
+  },
+  "files": [
+    "electron/**/*",
+    {
+      "from": "front/dist",
+      "to": "dist",
+      "filter": ["**/*"]
+    },
+    "package.json"
+  ],
+  "extraResources": [],
+  "win": {
+    "target": "nsis",
+    "icon": "electron/icon.png",
+    "signAndEditExecutable": false
+  },
+  "mac": {
+    "identity": null
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": true,
+    "allowToChangeInstallationDirectory": true
+  }
+}

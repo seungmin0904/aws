@@ -4,6 +4,8 @@ const fs = require('fs');
 const AutoLaunch = require('auto-launch');
 const os = require('os');
 
+// 개발 or 배포환경 여부 판단
+const isDev = !app.isPackaged;
 // GPU 캐시 충돌 방지
 app.disableHardwareAcceleration();
 
@@ -35,14 +37,21 @@ function createWindow() {
   //   console.error("❌ React dev server 로드 실패:", err);
   // });
 
-  // ✅ 프로덕션용 파일 로드
- mainWindow.loadFile(path.join(__dirname, '..', 'front', 'dist', 'index.html')).catch(err => {
-  console.error("❌ index.html 로드 실패:", err);
-});
+  
+   if (isDev) {
+    // ✅ 개발 중: Vite dev 서버 URL
+    mainWindow.loadURL("http://localhost:5173").catch(err => {
+      console.error("❌ React dev server 로드 실패:", err);
+    });
+  } else {
+    // ✅ 배포 모드: 빌드된 index.html
+    mainWindow.loadFile(path.join(__dirname, '..', 'dist', 'index.html')).catch(err => {
+      console.error("❌ index.html 로드 실패:", err);
+    });
+  }
 
   mainWindow.on('close', e => {
-    e.preventDefault();
-    mainWindow.hide();
+    app.quit();
   });
 
   mainWindow.on('minimize', e => {

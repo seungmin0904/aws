@@ -8,6 +8,9 @@ import com.example.boardapi.websocket.StompPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
@@ -29,13 +32,19 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
 
+    @Value("${spring.profiles.active:ec2}")
+    private String activeProfile;
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        List<String> origins = activeProfile.equals("local")
+                ? List.of("http://localhost:5173", "http://localhost:5174")
+                : List.of("https://serverpro.kro.kr");
+
         registry
                 .addEndpoint("/ws-chat")
-                // .addInterceptors(handshakeInterceptor) // ← 여기
-                .setAllowedOriginPatterns("https://serverpro.kro.kr");
-
+                .setAllowedOrigins(origins.toArray(String[]::new));
+        // .withSockJS(); ← sockjs 안 쓰면 생략
     }
 
     // 2) 브로커 설정

@@ -9,6 +9,7 @@ node_modules/
 dist/
 build/
 dist-electron/
+dist-electron-test/
 *.png
 
 # 환경 변수 파일 무시

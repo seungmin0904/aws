@@ -7,9 +7,12 @@
     "dev": "npm run start",
     "start": "concurrently \"npm run dev:front\" \"npm run dev:electron\"",
     "dev:front": "cd front && npm run dev",
-    "dev:electron": "wait-on http://localhost:5174 && electron .",
+    "dev:electron": "wait-on http://localhost:5173 && electron .",
     "build": "cd front && npm run build",
     "package": "electron-builder",
+    "build:all": "npm run build && npm run package",
+    "package:test": "electron-builder --config package.test.json",
+    "build:all:multi": "npm run build && npm run package && npm run package:test",
     "lint": "eslint .",
     "preview": "vite preview"
   },

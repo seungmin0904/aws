@@ -70,7 +70,7 @@ export const useWebSocket = (token) => {
 
     console.log("🌐 WebSocket 연결 시도 시작");
 
-    const socket = new WebSocket("wss://serverpro.kro.kr/ws-chat");
+    const socket = new WebSocket(import.meta.env.VITE_WS_URL);
     const client = Stomp.over(socket);
     client.debug = () => {};
 

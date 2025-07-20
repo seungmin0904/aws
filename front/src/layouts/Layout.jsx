@@ -82,7 +82,7 @@ export default function MainLayout() {
   }
 
   return (
-    <div className="fixed inset-0 flex flex-col pt-16">
+    <div className="fixed inset-0 flex flex-col pt-16 ">
       <div className="flex flex-1 min-h-0">
         <Sidebar1
           onSelectDM={handleSelectDM}
