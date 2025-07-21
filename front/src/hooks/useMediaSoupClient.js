@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import * as mediasoupClient from 'mediasoup-client';
 
-const SERVER_URL = 'https://serverpro.kro.kr';
+const SERVER_URL = import.meta.env.VITE_MEDIASOUP_SERVER_URL;
 
 export default function useMediasoupClient(userId, nickname) {
   const socketRef = useRef(null);
@@ -188,7 +188,15 @@ export default function useMediasoupClient(userId, nickname) {
       sendTransportRef.current.on('connectionstatechange', (state) => {
         console.log(`🚩 sendTransport connectionstatechange: ${state}`);
       });
-  
+      //  내 목소리 제거 MediaStreamSource는 
+      //  브라우저 내부 라우팅상 destination과 연결된 것처럼 작동할 수 있다.
+      //  <audio>를 하나 만들고, muted 시켜서 강제로 브라우저가 재생하지 않게 
+      //  막는 것이 현실적인 해결책.
+      const dummyAudio = new Audio();
+      dummyAudio.srcObject = stream;
+      dummyAudio.muted = true;
+      dummyAudio.play().catch(() => {});
+
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
       const source = audioContext.createMediaStreamSource(stream);
       const analyser = audioContext.createAnalyser();

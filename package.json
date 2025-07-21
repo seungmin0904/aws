@@ -13,6 +13,8 @@
     "build:all": "npm run build && npm run package",
     "package:test": "electron-builder --config package.test.json",
     "build:all:multi": "npm run build && npm run package && npm run package:test",
+    "build:front:local": "cd front && vite build --mode development",
+    "build:all:local": "npm run build:front:local && npm run package && npm run package:test",
     "lint": "eslint .",
     "preview": "vite preview"
   },
