@@ -19,13 +19,24 @@ export default function useMediasoupClient(userId, nickname) {
   const [speakingUserIds, setSpeakingUserIds] = useState(new Set());
   const [voiceParticipantsMap, setVoiceParticipantsMap] = useState(new Map());
 
-  const iceServers = [
-    {
-      urls: "turn:3.35.114.7:3478",
-      username: "testuser",
-      credential: "testpass"
-    }
-  ];
+  const isLocal = location.hostname === "localhost" || location.hostname === "127.0.0.1";
+
+// 배포는 IP 고정, 로컬은 .env 사용
+const iceServers = isLocal
+  ? [
+      {
+        urls: `turn:${import.meta.env.VITE_TURN_HOST}:${import.meta.env.VITE_TURN_PORT}`,
+        username: import.meta.env.VITE_TURN_USER,
+        credential: import.meta.env.VITE_TURN_PASS,
+      }
+    ]
+  : [
+      {
+        urls: "turn:3.35.114.7:3478",
+        username: "testuser",
+        credential: "testpass",
+      }
+    ];
   
   useEffect(() => {
      if (!userId || !nickname) return;
