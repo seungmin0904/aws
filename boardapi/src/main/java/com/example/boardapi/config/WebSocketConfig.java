@@ -38,7 +38,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         List<String> origins = activeProfile.equals("local")
-                ? List.of("http://localhost:5173", "http://localhost:5174")
+                ? List.of("http://localhost:5173", "http://localhost:5174",
+                        "file://")
                 : List.of("https://serverpro.kro.kr");
 
         registry

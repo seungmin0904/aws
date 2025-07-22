@@ -22,6 +22,7 @@
     "concurrently": "^8.2.0",
     "electron": "29.4.6",
     "electron-builder": "^24.3.0",
+    "vite": "^7.0.5",
     "wait-on": "^7.2.0"
   },
   "dependencies": {
@@ -62,14 +63,16 @@
       "output": "dist-electron"
     },
     "files": [
-  "electron/**/*",
-  {
-    "from": "front/dist",
-    "to": "dist",
-    "filter": ["**/*"]
-  },
-  "package.json"
-],
+      "electron/**/*",
+      {
+        "from": "front/dist",
+        "to": "dist",
+        "filter": [
+          "**/*"
+        ]
+      },
+      "package.json"
+    ],
     "extraResources": [],
     "win": {
       "target": "nsis",
